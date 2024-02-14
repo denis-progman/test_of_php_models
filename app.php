@@ -1,6 +1,7 @@
 <?php
 
 use App\database\Connection;
+use App\models\Invoice;
 use App\services\Invoices;
 
 require 'core/init.php';
@@ -15,16 +16,8 @@ require 'seeder.php';
 // Set up our fake database
 $databaseConnection = new Connection(seed());
 $invoicesService = new Invoices($databaseConnection);
-
-echo "Invoices:\n";
-
-foreach ($invoicesService->fetchInvoices() as $invoice) {
-    echo "Customer: {$invoice->getCustomer()->getName()}\n";
-    echo "Date: {$invoice->getCreationDate()->format('Y-m-d')}\n";
-    echo "Total Amount: {$invoice->getTotalAmount()}\n";
-    echo "Payment Date: {$invoice->getPayment()?->getPaymentDate()->format('Y-m-d')}\n";
-    echo "Payment Amount: {$invoice->getPayment()?->getAmount()}\n";
-    echo "Timezone: {$invoice->getCustomer()->getTimeZone()->getName()}\n";
-    echo "Is Payment Overdue: " . ($invoice->isPaymentOverdue() ? "Yes" : "No") . "\n";
-    echo "\n";
-}
+echo "\n\n";
+$invoices = $invoicesService->fetch();
+echo "ALL invoices (" . count($invoices->get()) . "):\n\n" . $invoicesService->fetch()->toString();
+$overdueInvoices = $invoices->filterOverdue();
+echo "OVERDUE invoices (" . count($overdueInvoices->get()) . "):\n\n" . $overdueInvoices->toString();

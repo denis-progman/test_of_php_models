@@ -1,1 +1,0 @@
-{"version":1,"defects":[],"times":{"InvoicesTest::return_empty_array_if_nothing_found":0.013,"InvoicesTest::return_array_with_one_invoice":0.002,"ShopTest::can_set_and_access_basic_shop_properties":0,"ShopTest::can_add_and_access_invoices":0}}

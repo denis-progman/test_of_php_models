@@ -3,6 +3,8 @@
 namespace App\models;
 
 use App\models\Invoice\Payment;
+use DateTime;
+use Exception;
 
 class Invoice
 {
@@ -59,11 +61,27 @@ class Invoice
         return $this->totalAmount;
     }
 
+    /**
+     * @throws Exception
+     */
     public function isPaymentOverdue() : bool
     {
-        $now = new \DateTime();
+        $now = new DateTime();
+        $dueDate = (new DateTime($this->creationDate->format('Y-m-d')))->add(new \DateInterval("P{$this->paymentDue}D"));
         $now->setTimezone($this->customer->getTimeZone());
-        $dueDate = $this->creationDate->add(new \DateInterval("P{$this->paymentDue}D"));
         return $now > $dueDate;
+    }
+
+    public function toString() : string
+    {
+        $str = "Customer: {$this->customer->getName()}\n";
+        $str .= "Date: {$this->creationDate->format('Y-m-d')}\n";
+        $str .= "Total Amount: {$this->totalAmount}\n";
+        $str .= "Payment Date: " . ($this->payment?->getPaymentDate()?->format('Y-m-d') ?? 'Not Paid') . "\n";
+        $str .= "Payment Amount: " . ($this->payment?->getAmount() ?? 'Not Paid') . "\n";
+        $str .= "Timezone: {$this->customer->getTimeZone()->getName()}\n";
+        $str .= "Is Payment Overdue: " . ($this->isPaymentOverdue() ? "Yes" : "No") . "\n";
+        $str .= "\n";
+        return $str;
     }
 }
