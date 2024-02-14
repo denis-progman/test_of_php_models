@@ -8,6 +8,7 @@ class Customer
     protected string $name;
     protected string $address;
     protected string $phone;
+    protected string $timeZone;
 
     public function __construct(string $name)
     {

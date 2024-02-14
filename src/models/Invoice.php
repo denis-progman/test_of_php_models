@@ -10,10 +10,11 @@ class Invoice
     protected ?Payment $payment = null;
     protected array $items;
     protected float $totalAmount = 0;
+    protected int $paymentDue;
 
     public function __construct(protected ?Customer $customer = null)
     {
-
+        $this->paymentDue = config('invoice.payment_due');
     }
 
     public function setCreationDate(\DateTime $date)
@@ -57,4 +58,6 @@ class Invoice
     {
         return $this->totalAmount;
     }
+
+
 }

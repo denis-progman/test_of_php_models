@@ -3,6 +3,8 @@
 use App\database\Connection;
 use App\services\Invoices;
 
+require 'core/procedures.php';
+require 'config.php';
 require __DIR__ . '/vendor/autoload.php';
 require 'seeder.php';
 
