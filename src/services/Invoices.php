@@ -3,6 +3,8 @@
 namespace App\services;
 
 
+use App\models\Invoice;
+
 class Invoices
 {
 
@@ -13,6 +15,9 @@ class Invoices
     /*
      * Assume this returns an Invoice object with its related Customer + Payment objects.
      * refer to return_array_with_one_invoice() in tests\InvoicesTest.php
+     */
+    /**
+     * @return Invoice[]
      */
     public function fetchInvoices() : array
     {
