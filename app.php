@@ -25,5 +25,7 @@ foreach ($invoicesService->fetchInvoices() as $invoice) {
     echo "Total Amount: {$invoice->getTotalAmount()}\n";
     echo "Payment Date: {$invoice->getPayment()?->getPaymentDate()->format('Y-m-d')}\n";
     echo "Payment Amount: {$invoice->getPayment()?->getAmount()}\n";
+    echo "Timezone: {$invoice->getCustomer()->getTimeZone()->getName()}\n";
+    echo "Is Payment Overdue: " . ($invoice->isPaymentOverdue() ? "Yes" : "No") . "\n";
     echo "\n";
 }

@@ -5,8 +5,8 @@ use App\models\Invoice\Payment;
 
 function seed()
 {
-    $customer1 = new Customer('Tom Cruise');
-    $customer2 = new Customer('Happy Guy');
+    $customer1 = new Customer('Tom Cruise', 'America/New_York');
+    $customer2 = new Customer('Happy Guy', 'Europe/Paris');
     $customer3 = new Customer('Lucy Dorito');
 
     $invoice1 = new Invoice($customer1);

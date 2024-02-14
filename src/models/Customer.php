@@ -2,17 +2,20 @@
 
 namespace App\models;
 
+use DateTimeZone;
+
 class Customer
 {
 
     protected string $name;
     protected string $address;
     protected string $phone;
-    protected string $timeZone;
+    protected DateTimeZone $timeZone;
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $timeZone = null)
     {
         $this->name = $name;
+        $this->timeZone = new DateTimeZone($timeZone ?? config('app.timezone'));
     }
 
     public function getName()
@@ -38,5 +41,15 @@ class Customer
     public function getPhone() : string
     {
         return $this->phone;
+    }
+
+    public function setTimeZone(string $timeZone) : void
+    {
+        $this->timeZone = new DateTimeZone($timeZone);
+    }
+
+    public function getTimeZone() : DateTimeZone
+    {
+        return $this->timeZone;
     }
 }

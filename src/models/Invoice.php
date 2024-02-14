@@ -59,5 +59,11 @@ class Invoice
         return $this->totalAmount;
     }
 
-
+    public function isPaymentOverdue() : bool
+    {
+        $now = new \DateTime();
+        $now->setTimezone($this->customer->getTimeZone());
+        $dueDate = $this->creationDate->add(new \DateInterval("P{$this->paymentDue}D"));
+        return $now > $dueDate;
+    }
 }
