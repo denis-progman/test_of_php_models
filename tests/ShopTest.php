@@ -24,7 +24,7 @@ class ShopTest extends \PHPUnit\Framework\TestCase
         $shop = new Shop();
 
         // create a payment
-        $customer = new Customer('Tom Cruise');
+        $customer = new Customer('Tom Cruise', '+1234567890');
 
         $invoice = new \App\Models\Invoice($customer);
         $invoice->setCreationDate(new DateTime());
