@@ -13,8 +13,11 @@ class Invoices
      */
     protected array $invoices = [];
 
+    protected string $fileStorage;
+
     public function __construct(protected object $databaseLayer)
     {
+        $this->fileStorage = config('app.file_storage', './');
     }
 
     /*
@@ -99,5 +102,16 @@ class Invoices
         }
         $table .= "</table>";
         return $table;
+    }
+
+    public function saveToCSVFile(string $fileNote = ''): string
+    {
+        $csv = implode(',', array_column(Invoice::OVERDUE_REPORT_FIELDS, 'label')) . "\n";
+        foreach ($this->invoices as $invoice) {
+            $csv .= implode(',', $invoice->toArray()) . "\n";
+        }
+        $fileName = "{$this->fileStorage}/" . date('Y-m-d_H-i-s') . "_{$fileNote}_invoices.csv";
+        file_put_contents($fileName, $csv);
+        return $fileName;
     }
 }
