@@ -4,6 +4,7 @@ namespace App\services;
 
 
 use App\models\Invoice;
+use LucidFrame\Console\ConsoleTable;
 
 class Invoices
 {
@@ -69,5 +70,34 @@ class Invoices
             $arr[] = $invoice->toArray();
         }
         return $arr;
+    }
+
+
+    public function toTerminalTable(): void
+    {
+        $table = new ConsoleTable();
+        $table->setHeaders(array_column(Invoice::OVERDUE_REPORT_FIELDS, 'label'));
+        foreach ($this->invoices as $invoice) {
+            $table->addRow(array_values($invoice->toArray()));
+        }
+        $table->display();
+    }
+
+    public function toHtmlTable(): string
+    {
+        $table = "<table><tr>";
+        foreach (array_column(Invoice::OVERDUE_REPORT_FIELDS, 'label') as $header) {
+            $table .= "<th>$header</th>";
+        }
+        $table .= "</tr>";
+        foreach ($this->invoices as $invoice) {
+            $table .= "<tr>";
+            foreach ($invoice->toArray() as $value) {
+                $table .= "<td>$value</td>";
+            }
+            $table .= "</tr>";
+        }
+        $table .= "</table>";
+        return $table;
     }
 }

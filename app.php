@@ -1,7 +1,6 @@
 <?php
 
 use App\database\Connection;
-use App\models\Invoice;
 use App\services\Invoices;
 
 require 'core/init.php';
@@ -19,5 +18,9 @@ $invoicesService = new Invoices($databaseConnection);
 echo "\n\n";
 $invoices = $invoicesService->fetch();
 echo "ALL invoices (" . count($invoices->get()) . "):\n\n" . $invoicesService->fetch()->toString();
+
 $overdueInvoices = $invoices->filterOverdue();
-echo "OVERDUE invoices (" . count($overdueInvoices->get()) . "):\n\n" . $overdueInvoices->toString();
+// echo $overdueInvoices->toHtmlTable(); // for showing in a web page
+// echo "OVERDUE invoices (" . count($invoices->get()) . "):\n\n" . $invoicesService->fetch()->toString(); // for showing in a terminal by the old style
+echo "OVERDUE invoices (" . count($overdueInvoices->get()) . "):\n\n";
+$overdueInvoices->toTerminalTable();

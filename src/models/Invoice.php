@@ -5,6 +5,7 @@ namespace App\models;
 use App\models\Invoice\Payment;
 use DateTime;
 use Exception;
+use function PHPUnit\Framework\isNull;
 
 class Invoice
 {
@@ -122,7 +123,11 @@ class Invoice
                     break;
                 }
             }
-            $invoiceArray[$field] = (($data && $type == "datetime") ? $data->format('Y-m-d H:i:s') : $data);
+            if ($data === null) {
+                $invoiceArray[$field] = $fieldSettings['rule'][null] ?? $fieldSettings['rule']['default'] ?? 'N/A';
+                continue;
+            }
+            $invoiceArray[$field] = (($type == "datetime") ? $data->format('Y-m-d H:i:s') : $data);
         }
         return $invoiceArray;
     }
