@@ -3,11 +3,20 @@ use App\models\Customer;
 use App\models\Invoice;
 use App\models\Invoice\Payment;
 
+function generatePhoneNumber(): string
+{
+    $number = '+';
+    for ($i = 0; $i < 11; $i++) {
+        $number .= rand(0, 9);
+    }
+    return $number;
+}
+
 function seed()
 {
-    $customer1 = new Customer('Tom Cruise', 'America/New_York');
-    $customer2 = new Customer('Happy Guy', 'Europe/Paris');
-    $customer3 = new Customer('Lucy Dorito');
+    $customer1 = new Customer('Tom Cruise', generatePhoneNumber(), 'America/New_York');
+    $customer2 = new Customer('Happy Guy', generatePhoneNumber(),'Europe/Paris');
+    $customer3 = new Customer('Lucy Dorito', generatePhoneNumber(), 'Asia/Tokyo');
 
     $invoice1 = new Invoice($customer1);
     $invoice1->setCreationDate((new DateTime())->sub(new DateInterval('P35D')));
@@ -21,9 +30,9 @@ function seed()
     $invoice3->setCreationDate((new DateTime())->sub(new DateInterval('P45D')));
     $invoice3->setTotalAmount(150);
     $payment = new Payment();
-    $payment->setPaymentDate(new DateTime());
+    $payment->setDate(new DateTime());
     $payment->setAmount($invoice3->getTotalAmount());
-    $invoice3->setPayment($payment);
+    $invoice3->setPaymentDate($payment);
 
     $invoice4 = new Invoice($customer3);
     $invoice4->setCreationDate((new DateTime())->sub(new DateInterval('P64D')));

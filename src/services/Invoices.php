@@ -58,4 +58,16 @@ class Invoices
         }
         return $str . "--------------------------------\n\n";
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $arr = [];
+        foreach ($this->invoices as $invoice) {
+            $arr[] = $invoice->toArray();
+        }
+        return $arr;
+    }
 }

@@ -8,24 +8,26 @@ class Customer
 {
 
     protected string $name;
-    protected string $address;
-    protected string $phone;
+    protected string $phoneNumber;
+    protected ?string $address;
     protected DateTimeZone $timeZone;
 
-    public function __construct(string $name, string $timeZone = null)
+    public function __construct(string $name, string $phoneNumber, string $timeZone = null, string $address = null)
     {
         $this->name = $name;
+        $this->phoneNumber = $phoneNumber;
+        $this->address = $address;
         $this->timeZone = new DateTimeZone($timeZone ?? config('app.timezone'));
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setAddress(string $address) : void
+    public function setName(string $name): void
     {
-        $this->address = $address;
+        $this->name = $name;
     }
 
     public function getAddress() : string
@@ -33,23 +35,28 @@ class Customer
         return $this->address;
     }
 
-    public function setPhone(string $phone) : void
+    public function setAddress(string $address) : void
     {
-        $this->phone = $phone;
+        $this->address = $address;
     }
 
-    public function getPhone() : string
+    public function getPhoneNumber() : string
     {
-        return $this->phone;
+        return $this->phoneNumber;
     }
 
-    public function setTimeZone(string $timeZone) : void
+    public function setPhoneNumber(string $phoneNumber) : void
     {
-        $this->timeZone = new DateTimeZone($timeZone);
+        $this->phoneNumber = $phoneNumber;
     }
 
     public function getTimeZone() : DateTimeZone
     {
         return $this->timeZone;
+    }
+
+    public function setTimeZone(string $timeZone) : void
+    {
+        $this->timeZone = new DateTimeZone($timeZone);
     }
 }

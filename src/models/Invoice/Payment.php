@@ -6,17 +6,17 @@ use Exception;
 
 class Payment
 {
-    protected \DateTime $paymentDate;
+    protected \DateTime $date;
     protected float $amount;
 
-    public function setPaymentDate(\DateTime $paymentDate) : void
+    public function setDate(\DateTime $date) : void
     {
-        $this->paymentDate = $paymentDate;
+        $this->date = $date;
     }
 
-    public function getPaymentDate() : \DateTime
+    public function getDate() : \DateTime
     {
-        return $this->paymentDate;
+        return $this->date;
     }
 
     public function setAmount(float $amount) : void

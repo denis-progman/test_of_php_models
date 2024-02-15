@@ -30,10 +30,10 @@ class ShopTest extends \PHPUnit\Framework\TestCase
         $invoice->setCreationDate(new DateTime());
 
         $payment = new Payment();
-        $payment->setPaymentDate(new DateTime());
+        $payment->setDate(new DateTime());
         $payment->setAmount(150);
 
-        $invoice->setPayment($payment);
+        $invoice->setPaymentDate($payment);
 
         $shop->addInvoice($invoice);
 

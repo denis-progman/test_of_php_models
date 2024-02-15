@@ -14,6 +14,43 @@ class Invoice
     protected float $totalAmount = 0;
     protected int $paymentDue;
 
+    const OVERDUE_REPORT_FIELDS = [
+        'customer.name' => [
+            'label' => 'Customer Name',
+        ],
+        'customer.phoneNumber' => [
+            'label' => 'Customer Phone Number',
+        ],
+        'creationDate' => [
+            'type' => 'datetime',
+            'label' => 'Creation Date',
+        ],
+        'totalAmount' => [
+            'label' => 'Total Amount',
+        ],
+        'payment.date' => [
+            "type" => "datetime",
+            'label' => 'Payment Date',
+            'rule' => [
+                null => 'Not Paid',
+            ],
+        ],
+        'payment.amount' => [
+            'label' => 'Payment Amount',
+            'rule' => [
+                null => 'Not Paid',
+            ],
+        ],
+        'PaymentOverdue' => [
+            'type' => 'boolean',
+            'label' => 'Is Payment Overdue',
+            'rule' => [
+                true => 'Yes',
+                false => 'No',
+            ]
+        ],
+    ];
+
     public function __construct(protected ?Customer $customer = null)
     {
         $this->paymentDue = config('invoice.payment_due');
@@ -24,17 +61,17 @@ class Invoice
         $this->creationDate = $date;
     }
 
-    public function getCreationDate()
+    public function getCreationDate(): DateTime
     {
         return $this->creationDate;
     }
 
-    public function getCustomer()
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
-    public function setPayment(Payment $payment) : void
+    public function setPaymentDate(Payment $payment) : void
     {
         $this->payment = $payment;
     }
@@ -72,16 +109,30 @@ class Invoice
         return $now > $dueDate;
     }
 
+    public function toArray() : array
+    {
+        $invoiceArray = [];
+        foreach (self::OVERDUE_REPORT_FIELDS as $field => $fieldSettings) {
+            $type = (isset($fieldSettings['type']) && $fieldSettings['type']) ? $fieldSettings['type'] : 'string';
+            $requestChain = explode('.', $field);
+            $data = $this;
+            foreach ($requestChain as $chainLink) {
+                $data = $data->{($type == "boolean" ? 'is' : 'get') . ucfirst($chainLink)}();
+                if ($data === null) {
+                    break;
+                }
+            }
+            $invoiceArray[$field] = (($data && $type == "datetime") ? $data->format('Y-m-d H:i:s') : $data);
+        }
+        return $invoiceArray;
+    }
+
     public function toString() : string
     {
-        $str = "Customer: {$this->customer->getName()}\n";
-        $str .= "Date: {$this->creationDate->format('Y-m-d')}\n";
-        $str .= "Total Amount: {$this->totalAmount}\n";
-        $str .= "Payment Date: " . ($this->payment?->getPaymentDate()?->format('Y-m-d') ?? 'Not Paid') . "\n";
-        $str .= "Payment Amount: " . ($this->payment?->getAmount() ?? 'Not Paid') . "\n";
-        $str .= "Timezone: {$this->customer->getTimeZone()->getName()}\n";
-        $str .= "Is Payment Overdue: " . ($this->isPaymentOverdue() ? "Yes" : "No") . "\n";
-        $str .= "\n";
-        return $str;
+        $str = '';
+        foreach ($this->toArray() as $key => $value) {
+            $str .= "$key: $value\n";
+        }
+        return "$str\n";
     }
 }
