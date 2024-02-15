@@ -123,11 +123,13 @@ class Invoice
                     break;
                 }
             }
-            if ($data === null) {
-                $invoiceArray[$field] = $fieldSettings['rule'][null] ?? $fieldSettings['rule']['default'] ?? 'N/A';
-                continue;
+            if ($data instanceof DateTime) {
+                $data = $data->format('Y-m-d H:i:s');
             }
-            $invoiceArray[$field] = (($type == "datetime") ? $data->format('Y-m-d H:i:s') : $data);
+            if (isset($fieldSettings['rule'])) {
+                $data = $fieldSettings['rule'][$data] ?? $data ?? $fieldSettings['rule']['default'] ?? null;
+            }
+            $invoiceArray[$field] = $data ?? 'N/A';
         }
         return $invoiceArray;
     }
