@@ -124,7 +124,7 @@ class Invoice
                 }
             }
             if ($data instanceof DateTime) {
-                $data = $data->format('Y-m-d H:i:s');
+                $data = $data->format('Y-m-d');
             }
             if (isset($fieldSettings['rule'])) {
                 $data = $fieldSettings['rule'][$data] ?? $data ?? $fieldSettings['rule']['default'] ?? null;
